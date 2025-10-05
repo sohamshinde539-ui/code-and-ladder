@@ -6,11 +6,13 @@
 
   // Game elements
   const boardEl = document.getElementById('board');
+  const overlayEl = document.getElementById('board-overlay');
   const positionEl = document.getElementById('position');
   const lastRollEl = document.getElementById('last-roll');
   const messageEl = document.getElementById('message');
   const rollBtn = document.getElementById('roll-btn');
   const resetBtn = document.getElementById('reset-btn');
+  const diceEl = document.getElementById('dice');
 
   const qModal = document.getElementById('question-modal');
   const qText = document.getElementById('q-text');
@@ -57,6 +59,57 @@
     }
   }
 
+  // Draw snakes and ladders overlay
+  function squareCenter(n) {
+    const i = n - 1;
+    const rowBottom = Math.floor(i / 10);
+    const col = (rowBottom % 2 === 0) ? (i % 10) : (9 - (i % 10));
+    const x = (col + 0.5) * 10;           // percent
+    const y = 100 - (rowBottom + 0.5) * 10; // percent from top
+    return { x, y };
+  }
+
+  function drawOverlay() {
+    if (!overlayEl) return;
+    overlayEl.innerHTML = '';
+    const svgNS = 'http://www.w3.org/2000/svg';
+
+    // Ladders: straight lines
+    Object.entries(ladders).forEach(([s, e]) => {
+      const a = squareCenter(Number(s));
+      const b = squareCenter(Number(e));
+      const line = document.createElementNS(svgNS, 'line');
+      line.setAttribute('x1', String(a.x));
+      line.setAttribute('y1', String(a.y));
+      line.setAttribute('x2', String(b.x));
+      line.setAttribute('y2', String(b.y));
+      line.setAttribute('stroke', 'var(--ladder)');
+      line.setAttribute('stroke-width', '1.8');
+      line.setAttribute('stroke-linecap', 'round');
+      overlayEl.appendChild(line);
+    });
+
+    // Snakes: curved paths
+    Object.entries(snakes).forEach(([s, e]) => {
+      const a = squareCenter(Number(s));
+      const b = squareCenter(Number(e));
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      const cx = (a.x + b.x) / 2 - dy * 0.15; // perpendicular offset
+      const cy = (a.y + b.y) / 2 + dx * 0.15;
+      const path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('d', `M ${a.x} ${a.y} Q ${cx} ${cy} ${b.x} ${b.y}`);
+      path.setAttribute('fill', 'none');
+      path.setAttribute('stroke', 'var(--snake)');
+      path.setAttribute('stroke-width', '2.2');
+      path.setAttribute('stroke-linecap', 'round');
+      overlayEl.appendChild(path);
+    });
+  }
+
+  drawOverlay();
+  window.addEventListener('resize', drawOverlay);
+
   let pos = 1;
   let canRoll = true;
   let token = document.createElement('div');
@@ -69,39 +122,69 @@
     if (msg) messageEl.textContent = msg; else messageEl.textContent = '';
   }
 
-  function rollDice() {
+  async function rollDice() {
     if (!canRoll) return;
+    canRoll = false;
+    rollBtn?.setAttribute('disabled', 'true');
+
     const roll = Math.floor(Math.random() * 6) + 1;
+    await animateDice(roll);
     lastRollEl.textContent = String(roll);
+
     let next = pos + roll;
     if (next > 100) {
       updateStatus(`Need exactly ${100 - pos} to finish.`);
+      canRoll = true;
+      rollBtn?.removeAttribute('disabled');
       return;
     }
-    moveTo(next).then(() => {
-      if (pos === 100) {
-        updateStatus('You win!');
-        canRoll = false;
-        return;
+
+    await moveTo(next);
+    if (pos === 100) {
+      updateStatus('You win!');
+      rollBtn?.setAttribute('disabled', 'true');
+      return;
+    }
+
+    // Ladder auto climb
+    if (ladders[pos]) {
+      const dest = ladders[pos];
+      await moveTo(dest);
+      updateStatus(`You climbed a ladder to ${dest}!`);
+      canRoll = true;
+      rollBtn?.removeAttribute('disabled');
+      return;
+    }
+
+    // Snake: ask question
+    if (snakes[pos]) {
+      const correct = await askQuestion();
+      if (correct) {
+        updateStatus('Correct! You avoided the snake.');
+      } else {
+        const dest = snakes[pos];
+        await moveTo(dest);
+        updateStatus(`Wrong! You slid down the snake to ${dest}.`);
       }
-      // Ladder auto climb
-      if (ladders[pos]) {
-        const dest = ladders[pos];
-        moveTo(dest).then(() => updateStatus(`You climbed a ladder to ${dest}!`));
-        return;
-      }
-      // Snake: ask question
-      if (snakes[pos]) {
-        askQuestion().then(correct => {
-          if (correct) {
-            updateStatus('Correct! You avoided the snake.');
-          } else {
-            const dest = snakes[pos];
-            moveTo(dest).then(() => updateStatus(`Wrong! You slid down the snake to ${dest}.`));
-          }
-        });
-      }
-    });
+    }
+
+    canRoll = true;
+    rollBtn?.removeAttribute('disabled');
+  }
+
+  function animateDice(final) {
+    if (!diceEl) return Promise.resolve();
+    diceEl.classList.add('rolling');
+    let i = 0;
+    const tick = setInterval(() => {
+      diceEl.textContent = String(Math.floor(Math.random() * 6) + 1);
+    }, 100);
+    return new Promise(resolve => setTimeout(() => {
+      clearInterval(tick);
+      diceEl.classList.remove('rolling');
+      diceEl.textContent = String(final);
+      resolve();
+    }, 700));
   }
 
   function moveTo(target) {

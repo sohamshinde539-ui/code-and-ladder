@@ -32,7 +32,9 @@
           <p class="muted">Roll the dice, climb ladders, and beware of snakes. Land on a snake to answer a coding question—answer correctly to avoid sliding down!</p>
 
           <div class="game-wrap">
-            <div class="board" id="board" aria-label="Snake and Ladder board"></div>
+            <div class="board" id="board" aria-label="Snake and Ladder board">
+              <svg id="board-overlay" class="board-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>
+            </div>
 
             <div class="panel">
               <div class="status">
@@ -40,6 +42,7 @@
                 <div><strong>Last roll:</strong> <span id="last-roll">-</span></div>
               </div>
               <div class="controls">
+                <div id="dice" class="dice" aria-live="polite" aria-label="Dice">-</div>
                 <button id="roll-btn" class="btn primary" aria-label="Roll Dice">Roll Dice</button>
                 <button id="reset-btn" class="btn" aria-label="Reset Game">Reset</button>
               </div>
