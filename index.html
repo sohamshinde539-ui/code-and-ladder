@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Code & Ladder</title>
-    <meta name="description" content="Code & Ladder - coding challenges and ladder-style rankings" />
+    <title>Snake & Ladder | Code & Ladder</title>
+    <meta name="description" content="Play Snake & Ladder with coding questions when you land on a snake." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -18,53 +18,50 @@
           <span class="name">Code &amp; Ladder</span>
         </div>
         <nav class="nav">
-          <a href="#features">Features</a>
-          <a href="#ladders">Ladders</a>
-          <a href="#about">About</a>
+          <a href="#game">Game</a>
+          <a href="#rules">Rules</a>
+          <a href="https://github.com/sohamshinde539-ui/code-and-ladder" target="_blank" rel="noopener">Repo</a>
         </nav>
       </div>
     </header>
 
     <main>
-      <section class="hero">
+      <section id="game" class="section">
         <div class="container">
-          <h1>Climb your skills. One rung at a time.</h1>
-          <p>Practice coding challenges organized into progressive ladders. Track progress, unlock streaks, and level up.</p>
-          <div class="cta">
-            <a class="btn primary" href="#ladders">Explore Ladders</a>
-            <a class="btn" href="#features">Learn More</a>
+          <h1>Snake &amp; Ladder with Coding Questions</h1>
+          <p class="muted">Roll the dice, climb ladders, and beware of snakes. Land on a snake to answer a coding question—answer correctly to avoid sliding down!</p>
+
+          <div class="game-wrap">
+            <div class="board" id="board" aria-label="Snake and Ladder board"></div>
+
+            <div class="panel">
+              <div class="status">
+                <div><strong>Position:</strong> <span id="position">1</span></div>
+                <div><strong>Last roll:</strong> <span id="last-roll">-</span></div>
+              </div>
+              <div class="controls">
+                <button id="roll-btn" class="btn primary" aria-label="Roll Dice">Roll Dice</button>
+                <button id="reset-btn" class="btn" aria-label="Reset Game">Reset</button>
+              </div>
+              <div class="legend">
+                <div class="legend-item"><span class="chip ladder"></span> Ladder</div>
+                <div class="legend-item"><span class="chip snake"></span> Snake</div>
+                <div class="legend-item"><span class="chip player"></span> You</div>
+              </div>
+              <div id="message" class="message" role="status" aria-live="polite"></div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section id="features" class="features section">
-        <div class="container grid-3">
-          <div class="card">
-            <h3>Structured Ladders</h3>
-            <p>Curated sequences from fundamentals to advanced topics, with milestones to guide your learning.</p>
-          </div>
-          <div class="card">
-            <h3>Daily Challenges</h3>
-            <p>Small, focused problems to keep your momentum and build consistency.</p>
-          </div>
-          <div class="card">
-            <h3>Progress Tracking</h3>
-            <p>Visualize your journey with streaks, badges, and ladder rankings.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="ladders" class="ladders section">
+      <section id="rules" class="section">
         <div class="container">
-          <h2>Example Ladders</h2>
-          <ul class="ladder-list" id="ladder-list"></ul>
-        </div>
-      </section>
-
-      <section id="about" class="about section">
-        <div class="container">
-          <h2>About</h2>
-          <p>Code &amp; Ladder is a concept site demonstrating a simple static scaffold you can extend with your own content or back end.</p>
+          <h2>Rules</h2>
+          <ul>
+            <li>Start at square 1. Roll 1–6 to move forward. You must roll exactly to land on 100.</li>
+            <li>Landing on the bottom of a ladder moves you up to its top.</li>
+            <li>Landing on a snake asks a coding question. Answer correctly to stay; answer wrong to slide down to the tail.</li>
+          </ul>
         </div>
       </section>
     </main>
@@ -74,6 +71,19 @@
         <p>© <span id="year"></span> Code &amp; Ladder. All rights reserved.</p>
       </div>
     </footer>
+
+    <!-- Question Modal -->
+    <div id="question-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="q-title" hidden>
+      <div class="modal-backdrop" id="modal-backdrop"></div>
+      <div class="modal-content" role="document">
+        <h3 id="q-title">Coding Question</h3>
+        <p id="q-text"></p>
+        <div id="q-choices" class="choices"></div>
+        <div class="modal-actions">
+          <button id="q-cancel" class="btn">Skip (slide down)</button>
+        </div>
+      </div>
+    </div>
 
     <script src="src/main.js" defer></script>
   </body>
