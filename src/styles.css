@@ -1,0 +1,69 @@
+/* Base styles for Code & Ladder */
+:root {
+  --bg: #0b0f1a;
+  --panel: #101729;
+  --text: #e4e7ee;
+  --muted: #a7b0c0;
+  --primary: #5b8cff;
+  --accent: #18d3a8;
+  --border: #1e2942;
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background: linear-gradient(180deg, var(--bg), #0e1424 60%, #0b0f1a);
+  color: var(--text);
+}
+
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(16, 23, 41, 0.8);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border);
+}
+.site-header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 0;
+}
+.brand { display: flex; gap: 10px; align-items: center; font-weight: 600; }
+.logo { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 6px; background: var(--panel); color: var(--accent); border: 1px solid var(--border); font-weight: 800; }
+.name { letter-spacing: 0.2px; }
+
+.nav { display: flex; gap: 18px; }
+.nav a { color: var(--muted); text-decoration: none; font-weight: 600; }
+.nav a:hover { color: var(--text); }
+
+.hero {
+  padding: 72px 0 32px;
+  text-align: center;
+}
+.hero h1 { font-size: clamp(28px, 5vw, 44px); margin: 0 0 12px; }
+.hero p { color: var(--muted); margin: 0 auto 22px; max-width: 720px; }
+
+.btn { display: inline-block; padding: 10px 16px; border-radius: 10px; border: 1px solid var(--border); color: var(--text); text-decoration: none; background: var(--panel); }
+.btn.primary { background: linear-gradient(180deg, var(--primary), #3e68d0); border: none; }
+.btn + .btn { margin-left: 10px; }
+
+.section { padding: 44px 0; }
+.grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+.card { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+.card h3 { margin-top: 0; }
+
+.ladder-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+.ladder-list li { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
+.ladder-list h4 { margin: 0 0 6px; font-size: 16px; }
+.ladder-list p { margin: 0; color: var(--muted); }
+
+.site-footer { border-top: 1px solid var(--border); padding: 18px 0; color: var(--muted); }

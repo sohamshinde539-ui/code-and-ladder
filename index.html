@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Code & Ladder</title>
+    <meta name="description" content="Code & Ladder - coding challenges and ladder-style rankings" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="src/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container">
+        <div class="brand">
+          <span class="logo" aria-hidden="true">{ }</span>
+          <span class="name">Code &amp; Ladder</span>
+        </div>
+        <nav class="nav">
+          <a href="#features">Features</a>
+          <a href="#ladders">Ladders</a>
+          <a href="#about">About</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="container">
+          <h1>Climb your skills. One rung at a time.</h1>
+          <p>Practice coding challenges organized into progressive ladders. Track progress, unlock streaks, and level up.</p>
+          <div class="cta">
+            <a class="btn primary" href="#ladders">Explore Ladders</a>
+            <a class="btn" href="#features">Learn More</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="features section">
+        <div class="container grid-3">
+          <div class="card">
+            <h3>Structured Ladders</h3>
+            <p>Curated sequences from fundamentals to advanced topics, with milestones to guide your learning.</p>
+          </div>
+          <div class="card">
+            <h3>Daily Challenges</h3>
+            <p>Small, focused problems to keep your momentum and build consistency.</p>
+          </div>
+          <div class="card">
+            <h3>Progress Tracking</h3>
+            <p>Visualize your journey with streaks, badges, and ladder rankings.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="ladders" class="ladders section">
+        <div class="container">
+          <h2>Example Ladders</h2>
+          <ul class="ladder-list" id="ladder-list"></ul>
+        </div>
+      </section>
+
+      <section id="about" class="about section">
+        <div class="container">
+          <h2>About</h2>
+          <p>Code &amp; Ladder is a concept site demonstrating a simple static scaffold you can extend with your own content or back end.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Code &amp; Ladder. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <script src="src/main.js" defer></script>
+  </body>
+</html>
